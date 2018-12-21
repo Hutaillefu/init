@@ -1,0 +1,15 @@
+if [ -f ~/Documents/crontabsum ]
+then
+	sum=$(cat ~/Documents/crontabsum)
+else
+	md5sum /etc/crontab | cut -d " " -f1 > ~/Documents/crontabsum
+	exit
+fi
+
+newsum=(md5sum /etc/crontab | cut -d " " -f1)
+
+if [ $sum != $newsum ]
+then
+	mail -s "Crontab" root <<< "Crontab was modified"
+fi
+
